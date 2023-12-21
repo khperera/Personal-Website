@@ -1,4 +1,7 @@
+const section = document.getElementById('canvassection_rheology');
 const canvas = document.getElementById('myCanvas');
+const original_window_width = window.innerWidth
+const original_window_height = window.innerHeight
 const ctx = canvas.getContext('2d');
 const firstHarmonicPhase = document.getElementById("slider")
 const thirdHarmonicPhase = document.getElementById("slider1")
@@ -55,8 +58,14 @@ setCanvasSize();
 
 
 function setCanvasSize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    
+
+    canvas.width = original_window_width;
+    canvas.height = original_window_height;
+    //canvas.width = window.innerWidth;
+    //canvas.height = window.innerHeight;
+    harmonic_data_height = canvas.height*0.5
+
     firstharmonic = firstHarmonicPhase.value
     thirdharmonic = thirdHarmonicPhase.value
     intensity = three_to_one_intensity.value;
@@ -64,11 +73,11 @@ function setCanvasSize() {
     first_intensity = 1 - intensity;
     third_intensity = intensity / denominator;
 
-    drawPoints(generatePoints(100, canvas.width, canvas.height, 0, 1 , 1),"black",true);
+    drawPoints(generatePoints(100, canvas.width, harmonic_data_height, 0, 1 , 1),"black",true);
     //drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, 1,first_intensity),"blue", false);
     //drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, 3,intensity),"red", false);
 
-    drawPoints(generatePoints_2(100, canvas.width, canvas.height, firstharmonic,first_intensity, thirdharmonic , intensity),"purple",false);
+    drawPoints(generatePoints_2(100, canvas.width, harmonic_data_height, firstharmonic,first_intensity, thirdharmonic , intensity),"purple",false);
 }
 
 
@@ -80,11 +89,11 @@ function generatePoints(i, n, m, phasedelay, multiplier, intensity) {
 
     for (let count = 0; count < i; count++) {
         const scaling = m/ 4 * intensity
-        const scaling_x = 1/i * n*0.75
+        const scaling_x = 1/i * n*0.85
         const offset = m / 2*0.75
-        const x = count*scaling_x;
+        const x = count*scaling_x+10;
         const y =
-            (Math.sin((count/i) * Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling +
+            (Math.sin((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling +
             offset;
         points.push({ x, y });
     }
@@ -99,9 +108,9 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
         const scaling_y1 = m/ 4 * intensity1
         const scaling_y2 = m/ 4 * intensity2
 
-        const scaling_x = 1/i * n*0.75
+        const scaling_x = 1/i * n*0.785
         const offset = m / 2*0.75
-        const x = count*scaling_x;
+        const x = count*scaling_x+10;
         const y =
             (Math.sin((count / i)*1 * Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI)* scaling_y1+
             Math.sin((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI)* scaling_y2) +
