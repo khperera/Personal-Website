@@ -35,3 +35,18 @@ p {
 * {
     box-sizing: border-box;
 }
+ /* Style for the button */
+ .toggle-btn {
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #ccc;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+/* Style for the 'on' state */
+.toggle-btn.active {
+    background-color: #4CAF50;
+    color: white;
+}

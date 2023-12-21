@@ -29,6 +29,19 @@ three_to_one_intensity.addEventListener('input', function() {
 });
 
 
+// JavaScript function to handle the toggle
+function toggleButton() {
+    var button = document.getElementById("toggleButton");
+    button.classList.toggle("active");
+
+    // Toggle the text content
+    if (button.textContent === "On") {
+        button.textContent = "Off";
+    } else {
+        button.textContent = "On";
+    }
+}
+
 window.addEventListener('resize', setCanvasSize);
 
 setCanvasSize();
@@ -46,23 +59,25 @@ function setCanvasSize() {
     canvas.height = window.innerHeight;
     firstharmonic = firstHarmonicPhase.value
     thirdharmonic = thirdHarmonicPhase.value
-    intensity1 = three_to_one_intensity.value
-    intensity = 0.6
-    first_intensity = 1/(intensity+1)
-    third_intensity = intensity/(intensity+1)
+    intensity = three_to_one_intensity.value;
+    denominator = intensity+ 1;
+    first_intensity = 1 - intensity;
+    third_intensity = intensity / denominator;
 
 
-    drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, first_intensity),"blue", true);
-    drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, third_intensity),"red", false);
-    drawPoints(generatePoints(100, canvas.width, canvas.height, 0 , 1),"black",false);
+    drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, 1,first_intensity),"blue", true);
+    drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, 3,intensity),"red", false);
+    drawPoints(generatePoints(100, canvas.width, canvas.height, 0, 1 , 1),"black",false);
 }
 
-function generatePoints(i, n, m, phasedelay, intensity) {
+function generatePoints(i, n, m, phasedelay, multiplier, intensity) {
     const points = [];
 
     for (let count = 0; count < i; count++) {
-        const x =count/i * n;
-        const y = (Math.sin(count/i*3.14*2+3.14+phasedelay/180*3.14)*intensity*m/4)+m/4;
+        const x = count/i * n;
+        const y =
+            (Math.sin((count / i)*multiplier * Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI) * m) / 4 * intensity +
+            m / 2;
         points.push({ x, y });
     }
 
