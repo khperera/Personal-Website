@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime.js Example</title>
+    <script src="./node_modules/animejs/lib/anime.min.js"></script>
+    <script src="./scripts/animated_js.js" defer></script>
+    <link href="./styles/website_style.css">
+    <link href="./styles/website_style.css" rel = "stylesheet">
+    <style>
+        #animated-element {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body onload="draw();">
+    <section>
+    <div id="animated-element">Hello, Anime.js!</div>
+
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+
+    </section>
+
+    <section>
+        <svg width="300" height="160" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 10 80 Q 95 80 180 80" stroke="red" fill="transparent" id="curve" />
+        
+            <circle cx="10" cy="80" r="2" fill="black" id="start-point" />
+            <circle cx="180" cy="80" r="2" fill="black" id="end-point" />
+            <circle cx="200" cy="80" r="5" fill="red" id="control-point" />
+          </svg>
+    </section>
+
+    
+  
+</body>
+</html>
