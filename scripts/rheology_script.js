@@ -64,25 +64,57 @@ function setCanvasSize() {
     first_intensity = 1 - intensity;
     third_intensity = intensity / denominator;
 
+    drawPoints(generatePoints(100, canvas.width, canvas.height, 0, 1 , 1),"black",true);
+    //drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, 1,first_intensity),"blue", false);
+    //drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, 3,intensity),"red", false);
 
-    drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, 1,first_intensity),"blue", true);
-    drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, 3,intensity),"red", false);
-    drawPoints(generatePoints(100, canvas.width, canvas.height, 0, 1 , 1),"black",false);
+    drawPoints(generatePoints_2(100, canvas.width, canvas.height, firstharmonic,first_intensity, thirdharmonic , intensity),"purple",false);
 }
+
+
+
+
 
 function generatePoints(i, n, m, phasedelay, multiplier, intensity) {
     const points = [];
 
     for (let count = 0; count < i; count++) {
-        const x = count/i * n;
+        const scaling = m/ 4 * intensity
+        const scaling_x = 1/i * n*0.75
+        const offset = m / 2*0.75
+        const x = count*scaling_x;
         const y =
-            (Math.sin((count / i)*multiplier * Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI) * m) / 4 * intensity +
-            m / 2;
+            (Math.sin((count/i) * Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling +
+            offset;
         points.push({ x, y });
     }
 
     return points;
 }
+
+function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensity2) {
+    const points = [];
+
+    for (let count = 0; count < i; count++) {
+        const scaling_y1 = m/ 4 * intensity1
+        const scaling_y2 = m/ 4 * intensity2
+
+        const scaling_x = 1/i * n*0.75
+        const offset = m / 2*0.75
+        const x = count*scaling_x;
+        const y =
+            (Math.sin((count / i)*1 * Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI)* scaling_y1+
+            Math.sin((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI)* scaling_y2) +
+            offset;
+        points.push({ x, y });
+    }
+
+    return points;
+}
+
+
+
+
 
 function drawPoints(points, color, clear) {
     if (clear){
