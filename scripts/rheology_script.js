@@ -60,10 +60,10 @@ setCanvasSize();
 function setCanvasSize() {
     
 
-    canvas.width = original_window_width;
-    canvas.height = original_window_height;
-    //canvas.width = window.innerWidth;
-    //canvas.height = window.innerHeight;
+    //canvas.width = original_window_width;
+    //canvas.height = original_window_height;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     harmonic_data_height = canvas.height*0.5
 
     firstharmonic = firstHarmonicPhase.value
@@ -95,7 +95,9 @@ function generatePoints(i, n, m, phasedelay, multiplier, intensity) {
         const y =
             (Math.sin((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling +
             offset;
-        points.push({ x, y });
+        const y_derivative = (Math.cos((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling *multiplier  +
+        offset;
+        points.push({ x, y_derivative });
     }
 
     return points;
@@ -108,7 +110,7 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
         const scaling_y1 = m/ 4 * intensity1
         const scaling_y2 = m/ 4 * intensity2
 
-        const scaling_x = 1/i * n*0.785
+        const scaling_x = 1/i * n*0.85
         const offset = m / 2*0.75
         const x = count*scaling_x+10;
         const y =
