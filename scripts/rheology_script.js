@@ -84,15 +84,54 @@ function setCanvasSize(timeFactor) {
     third_intensity = intensity / denominator;
     points1 = generatePoints(100, canvas.width, harmonic_data_height, 0, 1 , 1, timeFactor*waveform_speed_)
     points2 = generatePoints_2(100, canvas.width, harmonic_data_height, firstharmonic,first_intensity, thirdharmonic , intensity, timeFactor*waveform_speed_)
-
-    drawPoints(points1,points2,"black",true);
+    points_all = generatePoints_all(100, canvas.width, harmonic_data_height, firstharmonic,first_intensity, thirdharmonic , intensity, timeFactor*waveform_speed_)
+    //drawPoints(points1,points2,"black",true);
+    drawPoints2(points_all,"red", false)
     //drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, 1,first_intensity),"blue", false);
     //drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, 3,intensity),"red", false);
 
 }
 
 
+function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intensity2, timeFactor) {
+    const points = [];
 
+    for (let count = 0; count < i; count++) {
+        color = "black"
+        if (count/i < 0.05) {
+            color = "yellow"
+        } 
+        else { 
+            color = "black"
+        }
+
+
+        const scaling_y1 = m/ 4 * intensity1
+        const scaling_y2 = m/ 4 * intensity2
+
+        const scaling_x = 1/i * n*0.50
+        const offset = m / 2*0.75
+        const x = count*scaling_x+10;
+        const strain = Math.sin((count / i)*1 * Math.PI * 2 + Math.PI+timeFactor*Math.PI)* scaling_y1
+        const y_1 =
+            (Math.sin((count/i) *1* Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI))  * scaling_y1 +
+            offset;
+        const y_3 =
+            (Math.sin((count/i) *3* Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*Math.PI*3))  * scaling_y2 +
+            offset;
+        const y_derivative_1 = (Math.cos((count/i) *1* Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI))  * scaling_y1 *1  +
+        offset;
+        const y_derivative_3 = (Math.cos((count/i) *3* Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*Math.PI))  * scaling_y2  +
+        offset;
+
+        y_total = y_1 +y_3
+        y_derivative_total = y_derivative_1+y_derivative_3
+
+        points.push({ x, y_1,y_3,y_derivative_1, y_derivative_3, y_derivative_total,y_total, strain, color });
+    }
+
+    return points;
+}
 
 
 function generatePoints(i, n, m, phasedelay, multiplier, intensity, timeFactor) {
@@ -120,7 +159,7 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
 
 
     for (let count = 0; count < i; count++) {
-        color = "purple"
+        color = "black"
         if (count/i < 0.05) {
             color = "yellow"
         } 
@@ -133,6 +172,7 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
         const scaling_x = 1/i * n*0.85
         const offset = m / 2*0.75
         const x = count*scaling_x+10;
+        
         const y =
             (Math.sin((count / i)*1 * Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI)* scaling_y1+
             Math.sin((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*3*Math.PI)* scaling_y2) +
@@ -173,6 +213,10 @@ function drawPoints(point,points2, color, clear) {
         ctx.fill();
         ctx.stroke();
     });
+
+    
+
+
     /*
         point.forEach(point => {
             ctx.beginPath();
@@ -185,7 +229,46 @@ function drawPoints(point,points2, color, clear) {
     console.log(point);
 
 }
+//It should take in a list of points and draw them out.
+function drawPoints2(point, color, clear) {
+    if (clear){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    //const point = [].concat(pointslist)
+    //point = pointslist[0]
 
+
+    point.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.x, -point.y_total+600, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color;
+        ctx.fill();
+        ctx.stroke();
+    });
+    point.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.y_total-200, -1*point.strain+600, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color;
+        ctx.fill();
+        ctx.stroke();
+    });
+
+
+    
+
+
+    /*
+        point.forEach(point => {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y+550, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = point.color;
+            ctx.fill();
+            ctx.stroke();
+        });*/
+    
+    console.log(point);
+
+}
 
 // Create a timeline with anime.js
 const timeline = anime.timeline({
