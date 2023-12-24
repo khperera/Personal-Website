@@ -108,7 +108,7 @@ function generatePoints(i, n, m, phasedelay, multiplier, intensity, timeFactor) 
             offset;
         const y_derivative = (Math.cos((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling *multiplier  +
         offset;
-        points.push({ x, y });
+        points.push({ x, y, y_derivative });
     }
 
     return points;
@@ -117,7 +117,15 @@ function generatePoints(i, n, m, phasedelay, multiplier, intensity, timeFactor) 
 function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensity2, timeFactor) {
     const points = [];
 
+
     for (let count = 0; count < i; count++) {
+        color = "purple"
+        if (count/i < 0.05) {
+            color = "yellow"
+        } 
+        else { 
+            color = "purple"
+        }
         const scaling_y1 = m/ 4 * intensity1
         const scaling_y2 = m/ 4 * intensity2
 
@@ -128,7 +136,12 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
             (Math.sin((count / i)*1 * Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI)* scaling_y1+
             Math.sin((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*3*Math.PI)* scaling_y2) +
             offset;
-        points.push({ x, y });
+        const y_derivative =
+            (Math.cos((count / i)*1 * Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI)* scaling_y1+
+            Math.cos((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*3*Math.PI)* scaling_y2) +
+            offset;
+        
+        points.push({ x, y, y_derivative, color });
     }
 
     return points;
@@ -146,8 +159,16 @@ function drawPoints(points, color, clear) {
 
     points.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
+        ctx.arc(point.y, point.y_derivative, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color;
+        ctx.fill();
+        ctx.stroke();
+    });
+
+    points.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y+550, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color;
         ctx.fill();
         ctx.stroke();
     });
