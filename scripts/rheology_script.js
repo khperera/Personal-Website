@@ -82,13 +82,13 @@ function setCanvasSize(timeFactor) {
     denominator = intensity+ 1;
     first_intensity = 1 - intensity;
     third_intensity = intensity / denominator;
+    points1 = generatePoints(100, canvas.width, harmonic_data_height, 0, 1 , 1, timeFactor*waveform_speed_)
+    points2 = generatePoints_2(100, canvas.width, harmonic_data_height, firstharmonic,first_intensity, thirdharmonic , intensity, timeFactor*waveform_speed_)
 
-
-    drawPoints(generatePoints(100, canvas.width, harmonic_data_height, 0, 1 , 1, timeFactor*waveform_speed_),"black",true);
+    drawPoints(points1,points2,"black",true);
     //drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, 1,first_intensity),"blue", false);
     //drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, 3,intensity),"red", false);
 
-    drawPoints(generatePoints_2(100, canvas.width, harmonic_data_height, firstharmonic,first_intensity, thirdharmonic , intensity, timeFactor*waveform_speed_),"purple",false);
 }
 
 
@@ -103,12 +103,13 @@ function generatePoints(i, n, m, phasedelay, multiplier, intensity, timeFactor) 
         const scaling_x = 1/i * n*0.85
         const offset = m / 2*0.75
         const x = count*scaling_x+10;
+        const color = "red"
         const y =
             (Math.sin((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI+timeFactor*Math.PI))  * scaling +
             offset;
         const y_derivative = (Math.cos((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling *multiplier  +
         offset;
-        points.push({ x, y, y_derivative });
+        points.push({ x, y, y_derivative, color });
     }
 
     return points;
@@ -150,28 +151,39 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
 
 
 
-
-function drawPoints(points, color, clear) {
+//It should take in a list of points and draw them out.
+function drawPoints(point,points2, color, clear) {
     if (clear){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-        
+    //const point = [].concat(pointslist)
+    //point = pointslist[0]
 
-    points.forEach(point => {
+    point.forEach(point => {
         ctx.beginPath();
         ctx.arc(point.y, point.y_derivative, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = point.color;
+        ctx.fillStyle = "black";
         ctx.fill();
         ctx.stroke();
     });
-
-    points.forEach(point => {
+    points2.forEach(point2 => {
         ctx.beginPath();
-        ctx.arc(point.x, point.y+550, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = point.color;
+        ctx.arc(point2.y, point2.y_derivative, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = "black";
         ctx.fill();
         ctx.stroke();
     });
+    /*
+        point.forEach(point => {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y+550, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = point.color;
+            ctx.fill();
+            ctx.stroke();
+        });*/
+    
+    console.log(point);
+
 }
 
 
