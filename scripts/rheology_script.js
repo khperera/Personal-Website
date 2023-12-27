@@ -7,6 +7,8 @@ const firstHarmonicPhase = document.getElementById("slider")
 const thirdHarmonicPhase = document.getElementById("slider1")
 const three_to_one_intensity = document.getElementById("slider2")
 const waveform_speed = document.getElementById("slider3")
+var strain_position = 0
+var stress_position = 0
 
 
 // Add event listener to the slider input
@@ -15,6 +17,8 @@ const selectedValue = document.getElementById('selectedValue');
 const selectedValue1 = document.getElementById('selectedValue1');
 const selectedValue2 = document.getElementById('selectedValue2');
 const selectedValue3 = document.getElementById('selectedValue3');
+
+const top_plate_position_x = 100
 
 
 firstHarmonicPhase.addEventListener('input', function() {
@@ -79,14 +83,11 @@ function setCanvasSize(timeFactor) {
     thirdharmonic = thirdHarmonicPhase.value
     intensity = three_to_one_intensity.value;
     waveform_speed_ = waveform_speed.value;
-    denominator = intensity+ 1;
     first_intensity = 1 - intensity;
-    third_intensity = intensity / denominator;
-    points1 = generatePoints(100, canvas.width, harmonic_data_height, 0, 1 , 1, timeFactor*waveform_speed_)
-    points2 = generatePoints_2(100, canvas.width, harmonic_data_height, firstharmonic,first_intensity, thirdharmonic , intensity, timeFactor*waveform_speed_)
+
     points_all = generatePoints_all(100, canvas.width, harmonic_data_height, firstharmonic,first_intensity, thirdharmonic , intensity, timeFactor*waveform_speed_)
     //drawPoints(points1,points2,"black",true);
-    drawPoints2(points_all,"red", false)
+    drawPoints2(points_all,"red", true)
     //drawPoints(generatePoints(100, canvas.width, canvas.height, firstharmonic, 1,first_intensity),"blue", false);
     //drawPoints(generatePoints(100, canvas.width, canvas.height, thirdharmonic, 3,intensity),"red", false);
 
@@ -98,36 +99,40 @@ function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intens
 
     for (let count = 0; count < i; count++) {
         color = "black"
+        color1 = "black"
         if (count/i < 0.05) {
             color = "yellow"
+            color1 = "red"
         } 
         else { 
             color = "black"
         }
 
+        if (count == 0){
 
-        const scaling_y1 = m/ 4 * intensity1
-        const scaling_y2 = m/ 4 * intensity2
+        }
 
-        const scaling_x = 1/i * n*0.50
-        const offset = m / 2*0.75
-        const x = count*scaling_x+10;
-        const strain = Math.sin((count / i)*1 * Math.PI * 2 + Math.PI+timeFactor*Math.PI)* scaling_y1
+
+
+
+        const x = count/i
+        const strain = Math.sin((count / i)*1 * Math.PI * 2 + Math.PI+timeFactor*Math.PI)
         const y_1 =
-            (Math.sin((count/i) *1* Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI))  * scaling_y1 +
-            offset;
+            (Math.sin((count/i) *1* Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI));
         const y_3 =
-            (Math.sin((count/i) *3* Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*Math.PI*3))  * scaling_y2 +
-            offset;
-        const y_derivative_1 = (Math.cos((count/i) *1* Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI))  * scaling_y1 *1  +
-        offset;
-        const y_derivative_3 = (Math.cos((count/i) *3* Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*Math.PI))  * scaling_y2  +
-        offset;
+            (Math.sin((count/i) *3* Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*Math.PI*3));
+        const y_derivative_1 = (Math.cos((count/i) *1* Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI)) *1 ;
+        const y_derivative_3 = (Math.cos((count/i) *3* Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*Math.PI));
 
-        y_total = y_1 +y_3
-        y_derivative_total = y_derivative_1+y_derivative_3
+        y_total = y_1*intensity1 +y_3*intensity2
+        y_derivative_total = y_derivative_1*intensity1+y_derivative_3*intensity2
+        if (count == 0) {
+           strain_position = strain 
+           stress_position = y_total
+        }
 
-        points.push({ x, y_1,y_3,y_derivative_1, y_derivative_3, y_derivative_total,y_total, strain, color });
+        
+        points.push({ x, y_1,y_3,y_derivative_1, y_derivative_3, y_derivative_total,y_total, strain, color, color1 });
     }
 
     return points;
@@ -182,7 +187,12 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
             Math.cos((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*3*Math.PI)* scaling_y2) +
             offset;
         
+
+        
         points.push({ x, y, y_derivative, color });
+
+
+
     }
 
     return points;
@@ -240,15 +250,15 @@ function drawPoints2(point, color, clear) {
 
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.x, -point.y_total+600, 5, 0, 2 * Math.PI);
+        ctx.arc(point.x*100+300, point.y_total*-100 + 300, 5, 0, 2 * Math.PI);
         ctx.fillStyle = point.color;
         ctx.fill();
         ctx.stroke();
     });
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.y_total-200, -1*point.strain+600, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = point.color;
+        ctx.arc(point.x*100+200, point.strain*-100+500, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color1;
         ctx.fill();
         ctx.stroke();
     });
@@ -276,7 +286,7 @@ const timeline = anime.timeline({
 });
 
 // Add a delay of 500 milliseconds before starting the animation
-
+/*
 // Update the time variable every 500 milliseconds
 timeline.add({
     update: function(anim) {
@@ -285,6 +295,52 @@ timeline.add({
     },
     duration: 60000, // Duration of the update
 });
+*/
+
+
+// Update the time variable every 500 milliseconds
+timeline.add({
+    update: function(anim) {
+        const timeFactor = anim.progress; // Use the animation progress as the time factor
+        setCanvasSize(timeFactor/2);
+
+        var newXPosition = (strain_position*100)+105;
+        var newStressPosition = (stress_position*100)+105;
+
+        var element = document.querySelector('#top-plate-side-marker');
+        var element_stress = document.querySelector('#top-plate-side-bottom');
+        var element_stress_rotation = document.querySelector('#top-plate-top-marker');
+        var element_strain_rotation = document.querySelector('#bottom-plate-top-marker');
+
+
+        
+
+
+        
+        if (element) {
+            element.setAttribute('x', newXPosition);
+            var rotationAngle = stress_position*90; // Example rotation angle, adjust as needed
+            var cx = 650; // X coordinate of the center of rotation
+            var cy = 75; // Y coordinate of the center of rotation
+            element_strain_rotation.setAttribute('transform', `rotate(${rotationAngle} ${cx} ${cy})`);
+
+        }
+
+        if (element_stress) {
+            element_stress.setAttribute('x', newStressPosition);
+            var rotationAngle = strain_position*90; // Example rotation angle, adjust as needed
+            var cx = 400; // X coordinate of the center of rotation
+            var cy = 75; // Y coordinate of the center of rotation
+            element_stress_rotation.setAttribute('transform', `rotate(${rotationAngle} ${cx} ${cy})`);
+        }
+
+
+    },
+    duration: 60000, // Duration of the update
+});
+
+
+
 timeline.add({
     targets: {},
     duration: 0,
