@@ -117,6 +117,7 @@ function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intens
 
         const x = count/i
         const strain = Math.sin((count / i)*1 * Math.PI * 2 + Math.PI+timeFactor*Math.PI)
+        const strain_der = Math.cos((count / i)*1 * Math.PI * 2 + Math.PI+timeFactor*Math.PI)
         const y_1 =
             (Math.sin((count/i) *1* Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI));
         const y_3 =
@@ -132,7 +133,7 @@ function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intens
         }
 
         
-        points.push({ x, y_1,y_3,y_derivative_1, y_derivative_3, y_derivative_total,y_total, strain, color, color1 });
+        points.push({ x, y_1,y_3,y_derivative_1, y_derivative_3, y_derivative_total,y_total, strain, color, color1, strain_der });
     }
 
     return points;
@@ -250,18 +251,35 @@ function drawPoints2(point, color, clear) {
 
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.x*100+300, point.y_total*-100 + 300, 5, 0, 2 * Math.PI);
+        ctx.arc(point.x*100+50, point.y_total*-100 + 140, 5, 0, 2 * Math.PI);
         ctx.fillStyle = point.color;
         ctx.fill();
         ctx.stroke();
     });
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.x*100+200, point.strain*-100+500, 5, 0, 2 * Math.PI);
+        ctx.arc(point.x*100+210, point.strain*-100+140, 5, 0, 2 * Math.PI);
         ctx.fillStyle = point.color1;
         ctx.fill();
         ctx.stroke();
     });
+
+    point.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.strain*100+110, point.y_total*-100+600, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color1;
+        ctx.fill();
+        ctx.stroke();
+    });
+
+    point.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.strain_der*100+350, point.y_total*-100+600, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color1;
+        ctx.fill();
+        ctx.stroke();
+    });
+
 
 
     
