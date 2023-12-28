@@ -14,7 +14,7 @@ anime({
     { value: '#FCA311' }   // ending color
   ],
   easing: 'easeInOutSine',
-  duration: 5000,
+  duration: 2500,
   loop: true
 });
 
