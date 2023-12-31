@@ -9,7 +9,7 @@ const three_to_one_intensity = document.getElementById("slider2")
 const waveform_speed = document.getElementById("slider3")
 var strain_position = 0
 var stress_position = 0
-
+var phase_angle = 0
 
 // Add event listener to the slider input
 
@@ -45,18 +45,6 @@ waveform_speed.addEventListener('input', function() {
 });
 
 
-// JavaScript function to handle the toggle
-function toggleButton() {
-    var button = document.getElementById("toggleButton");
-    button.classList.toggle("active");
-
-    // Toggle the text content
-    if (button.textContent === "On") {
-        button.textContent = "Off";
-    } else {
-        button.textContent = "On";
-    }
-}
 
 window.addEventListener('resize', setCanvasSize);
 
@@ -67,6 +55,62 @@ setCanvasSize();
 
 
 
+function drawwords(){
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "Black"
+    ctx.fillText("Strain", 300, 200);
+    ctx.fillText("Stress", 300, 100);
+
+    ctx.fillText("Elastic Projection", 40, 650);
+    ctx.fillText("Viscous Projection", 300, 650);
+    ctx.fillText("Strain Rate", 340, 580);
+    ctx.fillText("Strain", 100, 580);
+
+
+
+    ctx.save()
+    ctx.font = "25px Arial";
+    ctx.translate(30,450)
+    ctx.rotate(-Math.PI/2)
+    
+    ctx.fillText("Stress", 0, 0);
+
+
+    ctx.restore()
+
+
+
+    ctx.beginPath();
+    ctx.arc(400, 190, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = "red";
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(430, 190, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = "black";
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(400, 90, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = "yellow";
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(430, 90, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = 5
+    ctx.rect(40, 300, 250, 250);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.rect(290, 300, 250, 250);
+    ctx.stroke();
+
+}
 
 
 
@@ -98,21 +142,21 @@ function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intens
     const points = [];
 
     for (let count = 0; count < i; count++) {
-        color = "black"
+        color = "white"
         color1 = "black"
         if (count/i < 0.05) {
             color = "yellow"
             color1 = "red"
         } 
         else { 
-            color = "black"
+            color = "white"
         }
 
         if (count == 0){
 
         }
 
-
+        
 
 
         const x = count/i
@@ -203,44 +247,6 @@ function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensit
 
 
 //It should take in a list of points and draw them out.
-function drawPoints(point,points2, color, clear) {
-    if (clear){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    //const point = [].concat(pointslist)
-    //point = pointslist[0]
-
-    point.forEach(point => {
-        ctx.beginPath();
-        ctx.arc(point.y, point.y_derivative, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = "black";
-        ctx.fill();
-        ctx.stroke();
-    });
-    points2.forEach(point2 => {
-        ctx.beginPath();
-        ctx.arc(point2.y, point2.y_derivative, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = "black";
-        ctx.fill();
-        ctx.stroke();
-    });
-
-    
-
-
-    /*
-        point.forEach(point => {
-            ctx.beginPath();
-            ctx.arc(point.x, point.y+550, 5, 0, 2 * Math.PI);
-            ctx.fillStyle = point.color;
-            ctx.fill();
-            ctx.stroke();
-        });*/
-    
-    console.log(point);
-
-}
-//It should take in a list of points and draw them out.
 function drawPoints2(point, color, clear) {
     if (clear){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -248,37 +254,56 @@ function drawPoints2(point, color, clear) {
     //const point = [].concat(pointslist)
     //point = pointslist[0]
 
-
+    //Waveform data
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.x*100+50, point.y_total*-100 + 140, 5, 0, 2 * Math.PI);
+        ctx.arc(point.x*200+50, point.y_total*-100 + 140, 5, 0, 2 * Math.PI);
         ctx.fillStyle = point.color;
         ctx.fill();
         ctx.stroke();
     });
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.x*100+210, point.strain*-100+140, 5, 0, 2 * Math.PI);
+        ctx.arc(point.x*200+50, point.strain*-100+140, 5, 0, 2 * Math.PI);
         ctx.fillStyle = point.color1;
+        ctx.fill();
+        ctx.stroke();
+    });
+    point.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(40, point.x*-250+250, 2, 0, 2 * Math.PI);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.stroke();
+    });
+    point.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.x*-250+275, 135, 2, 0, 2 * Math.PI);
+        ctx.fillStyle = "black";
         ctx.fill();
         ctx.stroke();
     });
 
+
+
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.strain*100+110, point.y_total*-100+600, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = point.color1;
+        ctx.arc(point.strain*100+160, point.y_total*-100+430, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color;
         ctx.fill();
         ctx.stroke();
     });
 
+
+
     point.forEach(point => {
         ctx.beginPath();
-        ctx.arc(point.strain_der*100+350, point.y_total*-100+600, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = point.color1;
+        ctx.arc(point.strain_der*100+410, point.y_total*-100+435, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = point.color;
         ctx.fill();
         ctx.stroke();
     });
+
 
 
 
@@ -321,6 +346,7 @@ timeline.add({
     update: function(anim) {
         const timeFactor = anim.progress; // Use the animation progress as the time factor
         setCanvasSize(timeFactor/2);
+        drawwords()
 
         var newXPosition = (strain_position*100)+105;
         var newStressPosition = (stress_position*100)+105;
@@ -330,6 +356,11 @@ timeline.add({
         var element_stress_rotation = document.querySelector('#top-plate-top-marker');
         var element_strain_rotation = document.querySelector('#bottom-plate-top-marker');
 
+        var sample = document.querySelector('#sample');
+
+        var color_red = String(255- phase_angle*255/90)
+        var color_blue = String(phase_angle*255/90)
+        var color = "rgb("+color_red +",0," + color_blue+")"
 
         
 
@@ -338,7 +369,7 @@ timeline.add({
         if (element) {
             element.setAttribute('x', newXPosition);
             var rotationAngle = stress_position*90; // Example rotation angle, adjust as needed
-            var cx = 650; // X coordinate of the center of rotation
+            var cx = 450; // X coordinate of the center of rotation
             var cy = 75; // Y coordinate of the center of rotation
             element_strain_rotation.setAttribute('transform', `rotate(${rotationAngle} ${cx} ${cy})`);
 
@@ -346,8 +377,9 @@ timeline.add({
 
         if (element_stress) {
             element_stress.setAttribute('x', newStressPosition);
+            sample.setAttribute("fill",color)
             var rotationAngle = strain_position*90; // Example rotation angle, adjust as needed
-            var cx = 400; // X coordinate of the center of rotation
+            var cx = 300; // X coordinate of the center of rotation
             var cy = 75; // Y coordinate of the center of rotation
             element_stress_rotation.setAttribute('transform', `rotate(${rotationAngle} ${cx} ${cy})`);
         }

@@ -287,6 +287,8 @@ function drawwords(){
     ctx.fillText("Strain", 200, 200);
     ctx.fillText("Stress", 200, 100);
 
+
+
     ctx.beginPath();
     ctx.arc(300, 190, 10, 0, 2 * Math.PI);
     ctx.fillStyle = "red";
@@ -307,6 +309,9 @@ function drawwords(){
     ctx.arc(330, 90, 10, 0, 2 * Math.PI);
     ctx.fillStyle = "white";
     ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.rect(100, 300, 150, 300);
     ctx.stroke();
 
 }

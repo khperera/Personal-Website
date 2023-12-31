@@ -33,3 +33,30 @@ anime({
   duration: 5000,
   loop: true
 });
+
+
+anime({
+  targets: ".circle",
+  r: [
+    { value: '40'  },  // Single sine wave
+    { value: '20' },
+    { value: '40' } // Three sine waves
+  ],
+
+  easing: 'easeInOutSine',
+  duration: 5000,
+  loop: true
+});
+
+anime({
+  targets: ".circle2",
+  r: [
+    { value: '20'  },  // Single sine wave
+    { value: '40' },
+    { value: '20' } // Three sine waves
+  ],
+  
+  easing: 'easeInOutSine',
+  duration: 5000,
+  loop: true
+});
