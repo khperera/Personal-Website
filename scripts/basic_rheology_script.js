@@ -53,8 +53,8 @@ function setCanvasSize(timeFactor) {
     //canvas.width = original_window_width;
     //canvas.height = original_window_height;
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight*0.25;
-    harmonic_data_height = canvas.height*0.5
+    canvas.height = window.innerHeight*0.5;
+    harmonic_data_height = canvas.height*2
 
     firstharmonic = firstHarmonicPhase.value
     waveform_speed_ = waveform_speed.value;
@@ -310,9 +310,7 @@ function drawwords(){
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.stroke();
-    ctx.beginPath();
-    ctx.rect(100, 300, 150, 300);
-    ctx.stroke();
+
 
 }
 

@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1"></script>
     <script src="./scripts/animated_js.js" defer></script>
     <script src="./scripts/rheology_script.js" defer></script>
-    <script src="./scripts/slider.js" defer></script>
+    <script src="./scripts/main.js" defer></script>
 
     <link href="./styles/website_style.css">
     <link href="./styles/website_style.css" rel = "stylesheet">`
@@ -22,22 +22,31 @@
         <text> <h1>Advanced Rheology (Fourier Transform Rheology)</h1> </text>
         <text> At large input amplitudes, the output becomes non-linear. </text><br><br>
 
-        <text font-size = 40px> Fourier transforms can break the nonlinear components up into harmonics relative to the input sine </text> 
+        <text font-size = 40px> Fourier transforms can break the nonlinear components up into harmonics relative to the input sine. </text> 
         
-        <svg width="1000" height="400" viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg">
+        <svg width="1000" height="200" viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg">
             
             <text x = "0" y = "50" fill = "black" font-size = "2em"> Input sine: </text>
-            <text x = "0" y = "310" fill = "red" font-size = "2em"> Output sine: </text>
+            <text x = "0" y = "150" fill = "red" font-size = "2em"> Output sine: </text>
             <path id = "wave3" d="M160,50 Q200,0 240,60 T330,50"  stroke-width = 4 stroke="#FCA311" fill="transparent"/>
             
-            <path id = "wave3" d="M190,300 Q225,240 270,300 T350,300"  stroke-width = 4 stroke="#FCA311" fill="transparent"/>
+            <path id = "wave3" d="M160,150 C173,100 187,100 200,150 C213,200 227,200 240,150 C253,100 267,100 280,150 C293,200 307,200 320,150"  stroke-width = 4 stroke="#FCA311" fill="transparent"/>
 
     
     
     
     
     
-        </svg>
+        </svg> <br> <br>
+
+        <text font-size = 40px> We can calculate rheologically relevant parameters from the amplitude and phase shift of each  harmonic. 
+            The first and third harmonics are traditionally used. </text> <br> <br>
+        
+            &nbsp;&nbsp;&nbsp;&nbsp;<text>Strain Stiffening ratio: v<sub>3</sub>/v<sub>1</sub> = I<sub>3</sub>/I<sub>1</sub>*sin(γ<sub>3</sub>)/sin(γ<sub>1</sub>) </text> <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<text>Shear Thickening ratio: e<sub>3</sub>/e<sub>1</sub> = I<sub>3</sub>/I<sub>1</sub>*cos(γ<sub>3</sub>)/cos(γ<sub>1</sub>) </text> <br><br>
+            <a href = "https://doi.org/10.1122/1.2970095"><text font-size = "1em" >Link to reference</text></a>
+
+        
 
  
 
@@ -68,18 +77,31 @@
 
             
 
-            <circle cx="100" cy="300" r = "70" fill="black" id="top-holder-top down" /> 
-            <circle cx="100" cy="370" r = "70" fill="black" id="ottom-holder-top down" />  
+            <circle cx="110" cy="225" r = "40" fill="black" id="top-holder-top down" /> 
+            <circle cx="110" cy="325" r = "40" fill="black" id="ottom-holder-top down" />  
     
     
-            <rect x="50" y="10" width = 5 height = 50  fill="red" id="top-plate-top-marker" />
-            <rect x="50" y="10" width = 5 height = 50  fill="yellow" id="bottom-plate-top-marker" />
+            <rect x="105" y="192" width = 5 height = 20  fill="red" id="top-plate-top-marker" />
+            <rect x="107.5" y="292" width = 5 height = 20  fill="yellow" id="bottom-plate-top-marker" />
 
     
-            <rect x="300" y="10" width = 350 height = 350    fill = "transparent"  style="stroke-width:3;stroke:rgb(0,0,0)" id="Box" />
+            <rect x="300" y="20" width = 350 height = 350    fill = "transparent"  style="stroke-width:3;stroke:rgb(0,0,0)" id="Box" />
 
-            <path id="lineAB" d="M 300 185 l 350 0" stroke="black"  stroke-width="3" fill="none" />
-            <path id="lineAB" d="M 300 185 l 350 0" stroke="black"  stroke-width="3" fill="none" />
+            <path id="lineAB" d="M 300 195 l 350 0" stroke="black"  stroke-width="3" fill="none" />
+            <path id="lineAB" d="M 475 20 l 0 350" stroke="black"  stroke-width="3" fill="none" />
+        
+            <text x = 400 y = 15>Intracycle Strain Hardening</text>
+            <text x = 400 y = 390>Intracycle Strain Softening</text>
+            <text x = 0 y = 0 transform="translate(290, 300) rotate(270)" >Intracycle Shear Thinning </text>
+
+            <text x = 0 y = 0 transform="translate(675, 300) rotate(270)" >Intracycle Shear Thickening </text>
+
+
+            <circle cx="400" cy="300" r = "10" fill="black" id="marker" /> 
+
+
+
+
 
 
             
@@ -93,7 +115,7 @@
         <span id="selectedValue">50</span> </br>
 
         <label for="slider1">Third Harmonic Phase Delay:</label>
-        <input type="range" id="slider1" name="slider1" min="0" max="180" value="50" step="1">
+        <input type="range" id="slider1" name="slider1" min="0.00" max="359.99" value="50" step="1">
         <span id="selectedValue1">50</span> </br>
 
         <label for="slider2">Third Harmonic Percentage of Total:</label>

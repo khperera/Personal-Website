@@ -10,6 +10,10 @@ const waveform_speed = document.getElementById("slider3")
 var strain_position = 0
 var stress_position = 0
 var phase_angle = 0
+var e1
+var e3
+var v1
+var v3
 
 // Add event listener to the slider input
 
@@ -156,6 +160,13 @@ function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intens
 
         }
 
+        v1 = intensity1*Math.sin(phasedelay1/180*Math.PI)/3
+        v3 = intensity2*Math.sin(phasedelay2/180*Math.PI)/3
+
+        e1 = -1*intensity1*Math.cos(phasedelay1/180*Math.PI)
+        e3 = -1*intensity2*Math.cos(phasedelay2/180*Math.PI)
+
+
         
 
 
@@ -183,65 +194,6 @@ function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intens
     return points;
 }
 
-
-function generatePoints(i, n, m, phasedelay, multiplier, intensity, timeFactor) {
-    const points = [];
-
-    for (let count = 0; count < i; count++) {
-        const scaling = m/ 4 * intensity
-        const scaling_x = 1/i * n*0.85
-        const offset = m / 2*0.75
-        const x = count*scaling_x+10;
-        const color = "red"
-        const y =
-            (Math.sin((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI+timeFactor*Math.PI))  * scaling +
-            offset;
-        const y_derivative = (Math.cos((count/i) *multiplier* Math.PI * 2 + Math.PI + (phasedelay / 180) * Math.PI))  * scaling *multiplier  +
-        offset;
-        points.push({ x, y, y_derivative, color });
-    }
-
-    return points;
-}
-
-function generatePoints_2(i, n, m, phasedelay1, intensity1, phasedelay2,intensity2, timeFactor) {
-    const points = [];
-
-
-    for (let count = 0; count < i; count++) {
-        color = "black"
-        if (count/i < 0.05) {
-            color = "yellow"
-        } 
-        else { 
-            color = "purple"
-        }
-        const scaling_y1 = m/ 4 * intensity1
-        const scaling_y2 = m/ 4 * intensity2
-
-        const scaling_x = 1/i * n*0.85
-        const offset = m / 2*0.75
-        const x = count*scaling_x+10;
-        
-        const y =
-            (Math.sin((count / i)*1 * Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI)* scaling_y1+
-            Math.sin((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*3*Math.PI)* scaling_y2) +
-            offset;
-        const y_derivative =
-            (Math.cos((count / i)*1 * Math.PI * 2 + Math.PI + (phasedelay1 / 180) * Math.PI+timeFactor*Math.PI)* scaling_y1+
-            Math.cos((count / i)*3 * Math.PI * 2 + Math.PI + (phasedelay2 / 180) * Math.PI+timeFactor*3*Math.PI)* scaling_y2) +
-            offset;
-        
-
-        
-        points.push({ x, y, y_derivative, color });
-
-
-
-    }
-
-    return points;
-}
 
 
 
@@ -355,6 +307,8 @@ timeline.add({
         var element_stress = document.querySelector('#top-plate-side-bottom');
         var element_stress_rotation = document.querySelector('#top-plate-top-marker');
         var element_strain_rotation = document.querySelector('#bottom-plate-top-marker');
+        var marker_nonlinear = document.querySelector('#marker');
+
 
         var sample = document.querySelector('#sample');
 
@@ -362,15 +316,24 @@ timeline.add({
         var color_blue = String(phase_angle*255/90)
         var color = "rgb("+color_red +",0," + color_blue+")"
 
+        S = (e3)/(e1+0.001)*10+475
+
+        T = -1*(v3)/(v1+0.001)*10+195
+
+
         
 
 
         
         if (element) {
             element.setAttribute('x', newXPosition);
+            marker_nonlinear.setAttribute("cx",S)
+            marker_nonlinear.setAttribute("cy",T)
+
+
             var rotationAngle = stress_position*90; // Example rotation angle, adjust as needed
-            var cx = 450; // X coordinate of the center of rotation
-            var cy = 75; // Y coordinate of the center of rotation
+            var cx = 110; // X coordinate of the center of rotation
+            var cy = 325; // Y coordinate of the center of rotation
             element_strain_rotation.setAttribute('transform', `rotate(${rotationAngle} ${cx} ${cy})`);
 
         }
@@ -379,8 +342,8 @@ timeline.add({
             element_stress.setAttribute('x', newStressPosition);
             sample.setAttribute("fill",color)
             var rotationAngle = strain_position*90; // Example rotation angle, adjust as needed
-            var cx = 300; // X coordinate of the center of rotation
-            var cy = 75; // Y coordinate of the center of rotation
+            var cx = 107.5; // X coordinate of the center of rotation
+            var cy = 225; // Y coordinate of the center of rotation
             element_stress_rotation.setAttribute('transform', `rotate(${rotationAngle} ${cx} ${cy})`);
         }
 
