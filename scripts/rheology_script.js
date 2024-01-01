@@ -327,8 +327,8 @@ timeline.add({
         
         if (element) {
             element.setAttribute('x', newXPosition);
-            marker_nonlinear.setAttribute("cx",S)
-            marker_nonlinear.setAttribute("cy",T)
+            marker_nonlinear.setAttribute("cy",S)
+            marker_nonlinear.setAttribute("cx",T)
 
 
             var rotationAngle = stress_position*90; // Example rotation angle, adjust as needed
