@@ -125,7 +125,7 @@ function setCanvasSize(timeFactor) {
     //canvas.height = original_window_height;
     
     canvas.width = Math.max(Math.min(window.innerWidth, 1000),600);
-    canvas.height = Math.min(window.innerHeight*0.5,600);
+    canvas.height = Math.max(window.innerHeight*0.4,600);
     harmonic_data_height = canvas.height*0.5
 
     firstharmonic = firstHarmonicPhase.value
