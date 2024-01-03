@@ -124,7 +124,7 @@ function setCanvasSize(timeFactor) {
     //canvas.width = original_window_width;
     //canvas.height = original_window_height;
     
-    canvas.width = Math.max(Math.min(window.innerWidth, 1000),600);
+    canvas.width = Math.max(Math.min(window.innerWidth, 1000),1600);
     canvas.height = Math.max(window.innerHeight*0.4,600);
     harmonic_data_height = canvas.height*0.5
 
@@ -317,9 +317,9 @@ timeline.add({
         var color_blue = String(phase_angle*255/90)
         var color = "rgb("+color_red +",0," + color_blue+")"
 
-        S = (e3)/(e1+0.001)*10+195
+        S = (e3)/(e1+0.001)*250+195
 
-        T = -1*(v3)/(v1+0.001)*10+475
+        T = -1*(v3)/(v1+0.001)*250+475
 
 
         
