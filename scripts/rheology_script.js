@@ -164,7 +164,7 @@ function generatePoints_all(i, n, m, phasedelay1, intensity1, phasedelay2,intens
         v1 = intensity1*Math.sin(phasedelay1/180*Math.PI)/3
         v3 = intensity2*Math.sin(phasedelay2/180*Math.PI)/3
 
-        e1 = -1*intensity1*Math.cos(phasedelay1/180*Math.PI)
+        e1 = intensity1*Math.cos(phasedelay1/180*Math.PI)
         e3 = -1*intensity2*Math.cos(phasedelay2/180*Math.PI)
 
 
@@ -319,7 +319,7 @@ timeline.add({
 
         S = (e3)/(e1+0.001)*250+195
 
-        T = -1*(v3)/(v1+0.001)*250+475
+        T = (v3)/(v1+0.001)*250+475
 
 
         
