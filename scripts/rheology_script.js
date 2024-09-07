@@ -317,9 +317,9 @@ timeline.add({
         var color_blue = String(phase_angle*255/90)
         var color = "rgb("+color_red +",0," + color_blue+")"
 
-        S = (e3)/(e1+0.001)*250+195
+        S = -(e3)/(e1+0.001)*250+195
 
-        T = (v3)/(v1+0.001)*250+475
+        T = -(v3)/(v1+0.001)*250+475
 
 
         
